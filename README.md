@@ -32,11 +32,21 @@ az provider register --namespace Microsoft.ContainerRegistry
 
 4. Update deploy.ps1 environment variables
 
-5. Run deploy.ps1
+5. Run deploy.ps1 to deploy the app with workload profiles enabled
 
 ```ps1
 ./deploy.ps1
 ```
+
+6. Open [./infra/provision.bicep](./infra/provision.bicep#L62) and comment out the workload profiles section
+
+7. Open a new terminal session, and run deploy.ps1 with a different '-SolutionName' parameter to deploy the app with workload profiles disabled
+
+```ps1
+./deploy.ps1 -SolutionName "orleans-ac2"
+```
+
+8. Observe the difference in the webtests in each resource group
 
 ## More info:
 
