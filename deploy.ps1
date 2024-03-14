@@ -1,4 +1,8 @@
-$env:SOLUTION = "orleans-aca-app"                         # Your app's name (e.g., "aspiresample42")
+param (
+    [string] $SolutionName = "orleans-aca-app"
+)
+
+$env:SOLUTION = $SolutionName                             # Your app's name (e.g., "aspiresample42")
 $env:LOCATION = "centralus"                               # Your desired Azure region (e.g., "westus")
 $env:RESOURCE_GROUP = "$($env:SOLUTION.ToLower())rg"      # Resource Group name, e.g. eshopliterg
 $env:CONTAINER_REGISTRY = "$($env:SOLUTION.ToLower())cr" -replace "-", ""  # Azure Container Registry name, e.g. eshoplitecr
