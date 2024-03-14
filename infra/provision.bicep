@@ -129,10 +129,6 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
 
   resource tables 'tableServices' = {
     name: 'default'
-
-    resource clustering 'tables' = {
-      name: 'clustering'
-    }
   }
 }
 
