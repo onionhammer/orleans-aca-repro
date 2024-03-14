@@ -1,5 +1,5 @@
 ## The issue:
-[./infra/provision.bicep](./infra/provision.bicep#62) (line 62) specifies use of workload profiles
+[./infra/provision.bicep](./infra/provision.bicep#L62) (line 62) specifies use of workload profiles
 
 - If the workload profiles area is there, the app fails to function
 - If the workload profiles are absent, the app functions fine.
