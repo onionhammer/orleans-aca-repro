@@ -1,0 +1,1 @@
+dotnet watch run --project ./orleans-repro.AppHost --no-hot-reload
