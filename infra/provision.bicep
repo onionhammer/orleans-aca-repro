@@ -194,8 +194,8 @@ resource silo 'Microsoft.App/containerApps@2023-04-01-preview' = {
     }
     template: {
       scale: {
-        minReplicas: 1
-        maxReplicas: 1
+        minReplicas: 2
+        maxReplicas: 2
       }
       serviceBinds: []
       containers: [
@@ -251,8 +251,8 @@ resource web 'Microsoft.App/containerApps@2023-04-01-preview' = {
     }
     template: {
       scale: {
-        minReplicas: 1
-        maxReplicas: 1
+        minReplicas: 2
+        maxReplicas: 2
       }
       containers: [
         {
