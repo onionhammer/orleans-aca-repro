@@ -289,38 +289,38 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-// Create webtest
-resource webTest 'Microsoft.Insights/webtests@2022-06-15' = {
-  name: 'wb${resourceToken}'
-  location: location
-  kind: 'ping'
-  tags: {
-    'hidden-link:${appInsights.id}': 'Resource'
-  }
-  properties: {
-    Configuration: {
-      WebTest: replace(loadTextContent('./webtest.xml'), '##WEB_URI##', '${webUri}?name=webtest')
-    }
-    Enabled: true
-    Frequency: 300
-    Kind: 'ping'
-    Locations: [
-      {
-        Id: 'us-tx-sn1-azr'
-      }
-      {
-        Id: 'us-il-ch1-azr'
-      }
-      {
-        Id: 'us-ca-sjc-azr'
-      }
-    ]
-    Name: 'webtest'
-    RetryEnabled: false
-    SyntheticMonitorId: 'webtest-id'
-    Timeout: 30
-  }
-}
+// // Create webtest
+// resource webTest 'Microsoft.Insights/webtests@2022-06-15' = {
+//   name: 'wb${resourceToken}'
+//   location: location
+//   kind: 'ping'
+//   tags: {
+//     'hidden-link:${appInsights.id}': 'Resource'
+//   }
+//   properties: {
+//     Configuration: {
+//       WebTest: replace(loadTextContent('./webtest.xml'), '##WEB_URI##', '${webUri}?name=webtest')
+//     }
+//     Enabled: true
+//     Frequency: 300
+//     Kind: 'ping'
+//     Locations: [
+//       {
+//         Id: 'us-tx-sn1-azr'
+//       }
+//       {
+//         Id: 'us-il-ch1-azr'
+//       }
+//       {
+//         Id: 'us-ca-sjc-azr'
+//       }
+//     ]
+//     Name: 'webtest'
+//     RetryEnabled: false
+//     SyntheticMonitorId: 'webtest-id'
+//     Timeout: 30
+//   }
+// }
 
 // Output the host name of the web app
 output webUri string = webUri

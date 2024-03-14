@@ -46,8 +46,6 @@ az provider register --namespace Microsoft.ContainerRegistry
 ./deploy.ps1 -SolutionName "orleans-ac2"
 ```
 
-8. Observe the difference in the webtests in each resource group
-
 ## More info:
 
 https://learn.microsoft.com/en-us/dotnet/aspire/deployment/azure/aca-deployment?tabs=visual-studio%2Cinstall-az-windows%2Cpowershell&pivots=azure-bicep
