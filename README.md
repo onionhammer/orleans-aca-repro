@@ -31,3 +31,7 @@ az provider register --namespace Microsoft.ContainerRegistry
 ```ps1
 ./deploy.ps1
 ```
+
+## More info:
+
+https://learn.microsoft.com/en-us/dotnet/aspire/deployment/azure/aca-deployment?tabs=visual-studio%2Cinstall-az-windows%2Cpowershell&pivots=azure-bicep

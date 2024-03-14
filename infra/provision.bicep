@@ -58,12 +58,15 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-
         sharedKey: logAnalytics.listKeys().primarySharedKey
       }
     }
+
+    // BREAKS IT  ////
     workloadProfiles: [
       {
         name: 'Consumption'
         workloadProfileType: 'Consumption'
       }
     ]
+    //////////////////
   }
 }
 
@@ -274,4 +277,51 @@ resource web 'Microsoft.App/containerApps@2023-04-01-preview' = {
   }
 }
 
-// TODO: Create webtest
+var webUri = 'https://${web.properties.configuration.ingress.fqdn}/'
+
+// Create an app insights
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: 'ai${resourceToken}'
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: logAnalytics.id
+  }
+}
+
+// Create webtest
+resource webTest 'Microsoft.Insights/webtests@2022-06-15' = {
+  name: 'wb${resourceToken}'
+  location: location
+  kind: 'ping'
+  tags: {
+    'hidden-link:${appInsights.id}': 'Resource'
+  }
+  properties: {
+    Configuration: {
+      WebTest: replace(loadTextContent('./webtest.xml'), '##WEB_URI##', '${webUri}?name=webtest')
+    }
+    Enabled: true
+    Frequency: 300
+    Kind: 'ping'
+    Locations: [
+      {
+        Id: 'us-tx-sn1-azr'
+      }
+      {
+        Id: 'us-il-ch1-azr'
+      }
+      {
+        Id: 'us-ca-sjc-azr'
+      }
+    ]
+    Name: 'webtest'
+    RetryEnabled: false
+    SyntheticMonitorId: 'webtest-id'
+    Timeout: 30
+  }
+}
+
+// Output the host name of the web app
+output webUri string = webUri
