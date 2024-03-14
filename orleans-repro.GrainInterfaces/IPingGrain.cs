@@ -4,5 +4,5 @@ namespace orleans_repro.GrainInterfaces;
 
 public interface IPingGrain : IGrainWithIntegerKey
 {
-    Task PingAsync();
+    Task<string> PingAsync(string name);
 }

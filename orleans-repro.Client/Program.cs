@@ -15,9 +15,9 @@ app.MapGet("/", async (IClusterClient client, string name = "test") =>
 
     try
     {
-        await client.GetGrain<IPingGrain>(id).PingAsync();
-
-        return Results.Ok($"Hello, {name}!");
+        return Results.Ok(
+            await client.GetGrain<IPingGrain>(id).PingAsync(name)
+        );
     }
     catch (Exception ex)
     {

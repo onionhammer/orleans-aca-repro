@@ -8,9 +8,8 @@ public class PingGrain : Grain, IPingGrain
     {
     }
 
-    public Task PingAsync()
+    public Task<string> PingAsync(string name)
     {
-        Console.WriteLine("Ping!");
-        return Task.CompletedTask;
+        return Task.FromResult($"Hello, {name}!");
     }
 }
