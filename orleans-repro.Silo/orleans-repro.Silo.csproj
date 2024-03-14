@@ -13,11 +13,13 @@
     <PackageReference Include="Aspire.Azure.Storage.Blobs" Version="8.0.0-preview.4.24156.9" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="8.1.0-preview3" />
     <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="8.1.0-preview3" />
+    <PackageReference Include="Microsoft.Orleans.Sdk" Version="8.1.0-preview3" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="8.1.0-preview3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\orleans-repro.ServiceDefaults\orleans-repro.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\orleans-repro.GrainInterfaces\orleans-repro.GrainInterfaces.csproj" />
   </ItemGroup>
 
 </Project>
