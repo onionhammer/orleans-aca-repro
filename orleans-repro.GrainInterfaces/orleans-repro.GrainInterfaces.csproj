@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>orleans_repro.GrainInterfaces</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Orleans.Sdk" Version="8.1.0-preview3" />
+    <PackageReference Include="Microsoft.Orleans.Sdk" Version="9.1.2" />
   </ItemGroup>
 
 </Project>

@@ -25,7 +25,7 @@ public static class Extensions
             http.AddStandardResilienceHandler();
 
             // Turn on service discovery by default
-            http.UseServiceDiscovery();
+            http.AddServiceDiscovery();
         });
 
         return builder;
@@ -44,7 +44,6 @@ public static class Extensions
             {
                 metrics.AddAspNetCoreInstrumentation()
                        .AddHttpClientInstrumentation()
-                       .AddProcessInstrumentation()
                        .AddRuntimeInstrumentation();
             })
             .WithTracing(tracing =>
@@ -56,7 +55,6 @@ public static class Extensions
                 }
 
                 tracing.AddAspNetCoreInstrumentation()
-                       .AddGrpcClientInstrumentation()
                        .AddHttpClientInstrumentation();
             });
 

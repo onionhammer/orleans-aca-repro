@@ -3,7 +3,7 @@ using orleans_repro.GrainInterfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddKeyedAzureTableService("clustering");
+builder.AddKeyedAzureTableClient("clustering");
 builder.UseOrleansClient();
 
 var app = builder.Build();
