@@ -20,6 +20,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>orleans_repro.Client</RootNamespace>
+    <PublishProfile>DefaultContainer</PublishProfile>
   </PropertyGroup>
 
 </Project>

@@ -31,8 +31,21 @@ param siloImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:l
 @description('The web image to deploy')
 param webImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
 
+// Add tags
+resource tags 'Microsoft.Resources/tags@2021-04-01' = {
+  name: 'default'
+  properties: {
+    tags: {
+      Application: 'Orleans Repro'
+      Utility: 'Environment'
+      Environment: resourceGroupName
+      Production: 'false'
+    }
+  }
+}
+
 // log analytics
-resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2021-12-01-preview' = {
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: 'logs${resourceToken}'
   location: location
   properties: any({
@@ -47,7 +60,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2021-12-01-previ
 }
 
 // the container apps environment
-resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-preview' = {
+resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2024-10-02-preview' = {
   name: 'acae${resourceToken}'
   location: location
   properties: {
@@ -71,7 +84,7 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-
 }
 
 // the container registry
-resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' = {
+resource containerRegistry 'Microsoft.ContainerRegistry/registries@2024-11-01-preview' = {
   name: containerRegistryName
   location: location
   sku: {
@@ -116,7 +129,7 @@ resource aksAcrPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
 }
 
 // Azure storage
-resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+resource storage 'Microsoft.Storage/storageAccounts@2024-01-01' = {
   name: take('st${resourceToken}', 24)
   location: location
   kind: 'StorageV2'
@@ -165,7 +178,7 @@ var clusterEnvs = [
 var appPort = 3000
 
 // silo - the app's back-end
-resource silo 'Microsoft.App/containerApps@2023-04-01-preview' = {
+resource silo 'Microsoft.App/containerApps@2024-10-02-preview' = {
   name: 'silo'
   location: location
   identity: {
@@ -221,7 +234,7 @@ resource silo 'Microsoft.App/containerApps@2023-04-01-preview' = {
 }
 
 // web - the app's front end
-resource web 'Microsoft.App/containerApps@2023-04-01-preview' = {
+resource web 'Microsoft.App/containerApps@2024-10-02-preview' = {
   name: 'web'
   location: location
   identity: {
@@ -289,38 +302,38 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-// // Create webtest
-// resource webTest 'Microsoft.Insights/webtests@2022-06-15' = {
-//   name: 'wb${resourceToken}'
-//   location: location
-//   kind: 'ping'
-//   tags: {
-//     'hidden-link:${appInsights.id}': 'Resource'
-//   }
-//   properties: {
-//     Configuration: {
-//       WebTest: replace(loadTextContent('./webtest.xml'), '##WEB_URI##', '${webUri}?name=webtest')
-//     }
-//     Enabled: true
-//     Frequency: 300
-//     Kind: 'ping'
-//     Locations: [
-//       {
-//         Id: 'us-tx-sn1-azr'
-//       }
-//       {
-//         Id: 'us-il-ch1-azr'
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr'
-//       }
-//     ]
-//     Name: 'webtest'
-//     RetryEnabled: false
-//     SyntheticMonitorId: 'webtest-id'
-//     Timeout: 30
-//   }
-// }
+// Create webtest
+resource webTest 'Microsoft.Insights/webtests@2022-06-15' = {
+  name: 'wb${resourceToken}'
+  location: location
+  kind: 'ping'
+  tags: {
+    'hidden-link:${appInsights.id}': 'Resource'
+  }
+  properties: {
+    Configuration: {
+      WebTest: replace(loadTextContent('./webtest.xml'), '##WEB_URI##', '${webUri}?name=webtest')
+    }
+    Enabled: true
+    Frequency: 300
+    Kind: 'ping'
+    Locations: [
+      {
+        Id: 'us-tx-sn1-azr'
+      }
+      {
+        Id: 'us-il-ch1-azr'
+      }
+      {
+        Id: 'us-ca-sjc-azr'
+      }
+    ]
+    Name: 'webtest'
+    RetryEnabled: false
+    SyntheticMonitorId: 'webtest-id'
+    Timeout: 30
+  }
+}
 
 // Output the host name of the web app
 output webUri string = webUri
