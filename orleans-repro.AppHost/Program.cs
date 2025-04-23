@@ -9,10 +9,14 @@ var orleans = builder.AddOrleans("my-app")
     .WithClustering(clusteringTable);
 
 var silo = builder.AddProject<orleans_repro_Silo>("silo")
-    .WithReference(orleans);
+    .WithReference(orleans)
+    .WithHttpHealthCheck("/")
+    .WaitFor(clusteringTable);
 
 var client = builder.AddProject<orleans_repro_Client>("client")
     .WithReference(silo)
-    .WithReference(orleans);
+    .WithReference(orleans)
+    .WithHttpHealthCheck("/")
+    .WaitFor(silo);
 
 builder.Build().Run();
