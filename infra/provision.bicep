@@ -59,6 +59,76 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   })
 }
 
+resource vnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
+  name: 'vnet${resourceToken}'
+  location: location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        '10.1.0.0/16'
+      ]
+    }
+    subnets: [
+      // App subnet
+      {
+        name: 'apps'
+        properties: {
+          delegations: [
+            {
+              name: 'Microsoft.App/environments'
+              properties: {
+                serviceName: 'Microsoft.App/environments'
+              }
+            }
+          ]
+          addressPrefix: '10.1.10.0/23'
+          serviceEndpoints: [
+            {
+              service: 'Microsoft.Storage'
+              locations: [
+                '*'
+              ]
+            }
+            {
+              service: 'Microsoft.KeyVault'
+              locations: [
+                '*'
+              ]
+            }
+            {
+              service: 'Microsoft.AzureCosmosDB'
+              locations: [
+                '*'
+              ]
+            }
+          ]
+        }
+      }
+
+      // Database subnet
+      {
+        name: 'postgres'
+        properties: {
+          addressPrefix: '10.1.12.0/24'
+        }
+      }
+
+      // Cache subnet
+      {
+        name: 'redis'
+        properties: {
+          addressPrefix: '10.1.13.0/24'
+          privateEndpointNetworkPolicies: 'Disabled'
+        }
+      }
+    ]
+  }
+
+  resource apps 'subnets' existing = {
+    name: 'apps'
+  }
+}
+
 // the container apps environment
 resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2024-10-02-preview' = {
   name: 'acae${resourceToken}'
@@ -70,6 +140,11 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2024-10-02-
         customerId: logAnalytics.properties.customerId
         sharedKey: logAnalytics.listKeys().primarySharedKey
       }
+    }
+
+    vnetConfiguration: {
+      internal: false
+      infrastructureSubnetId: vnet::apps.id
     }
 
     // BREAKS IT  ////
