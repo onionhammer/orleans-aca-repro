@@ -23,6 +23,9 @@ param containerCpuCoreCount string = '0.25'
 @description('Memory allocated to a single container instance, e.g., 1Gi')
 param containerMemory string = '0.5Gi'
 
+@description('The number of replicas to create for each app')
+param replicas int = 1
+
 var resourceToken = toLower(uniqueString(subscription().id, resourceGroupName, location))
 
 @description('The silo image to deploy')
@@ -284,8 +287,8 @@ resource silo 'Microsoft.App/containerApps@2024-10-02-preview' = {
     }
     template: {
       scale: {
-        minReplicas: 2
-        maxReplicas: 2
+        minReplicas: replicas
+        maxReplicas: replicas
       }
       serviceBinds: []
       containers: [
@@ -341,8 +344,8 @@ resource web 'Microsoft.App/containerApps@2024-10-02-preview' = {
     }
     template: {
       scale: {
-        minReplicas: 2
-        maxReplicas: 2
+        minReplicas: replicas
+        maxReplicas: replicas
       }
       containers: [
         {
