@@ -344,13 +344,49 @@ resource web 'Microsoft.App/containerApps@2024-10-02-preview' = {
     }
     template: {
       scale: {
-        minReplicas: replicas
+        minReplicas: 0
         maxReplicas: replicas
+        rules: [
+          {
+            name: 'cron-scaleup'
+            custom: {
+              type: 'cron'
+              metadata: {
+                timezone: 'US/Central'
+                start: '0 * * * *'
+                desiredReplicas: '${replicas}'
+              }
+            }
+          }
+          {
+            name: 'cron-scaledown'
+            custom: {
+              type: 'cron'
+              metadata: {
+                timezone: 'US/Central'
+                start: '30 * * * *'
+                desiredReplicas: '0'
+              }
+            }
+          }
+        ]
       }
       containers: [
         {
           image: webImage
           name: 'web'
+          probes: [
+            {
+              type: 'Liveness'
+              failureThreshold: 10
+              periodSeconds: 10
+              timeoutSeconds: 5
+              httpGet: {
+                port: appPort
+                path: '/?name=health'
+              }
+            }
+          ]
           env: concat([
             {
               name: 'ASPNETCORE_URLS'
@@ -392,7 +428,7 @@ resource webTest 'Microsoft.Insights/webtests@2022-06-15' = {
     Configuration: {
       WebTest: replace(loadTextContent('./webtest.xml'), '##WEB_URI##', '${webUri}?name=webtest')
     }
-    Enabled: true
+    Enabled: false // TODO: Set this back to true
     Frequency: 300
     Kind: 'ping'
     Locations: [
