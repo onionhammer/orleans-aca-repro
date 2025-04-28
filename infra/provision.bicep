@@ -359,18 +359,6 @@ resource web 'Microsoft.App/containerApps@2024-10-02-preview' = {
               }
             }
           }
-          {
-            name: 'cron-scaledown'
-            custom: {
-              type: 'cron'
-              metadata: {
-                timezone: 'US/Central'
-                start: '30 * * * *'
-                end: '0 * * * *'
-                desiredReplicas: '0'
-              }
-            }
-          }
         ]
       }
       containers: [
@@ -378,6 +366,16 @@ resource web 'Microsoft.App/containerApps@2024-10-02-preview' = {
           image: webImage
           name: 'web'
           probes: [
+            {
+              type: 'Startup'
+              failureThreshold: 3
+              periodSeconds: 10
+              timeoutSeconds: 5
+              httpGet: {
+                port: appPort
+                path: '/?name=startup'
+              }
+            }
             {
               type: 'Liveness'
               failureThreshold: 10
