@@ -354,6 +354,7 @@ resource web 'Microsoft.App/containerApps@2024-10-02-preview' = {
               metadata: {
                 timezone: 'US/Central'
                 start: '0 * * * *'
+                end: '30 * * * *'
                 desiredReplicas: '${replicas}'
               }
             }
@@ -365,6 +366,7 @@ resource web 'Microsoft.App/containerApps@2024-10-02-preview' = {
               metadata: {
                 timezone: 'US/Central'
                 start: '30 * * * *'
+                end: '0 * * * *'
                 desiredReplicas: '0'
               }
             }
